@@ -6,56 +6,34 @@ output: html_document
 ---
 
 ```{r}
-names1 <- c("Caoyuan", "Ling-Cai", "Xinke", "Yiqun")
+names1 <- c("Rachel", "Cha", "Lee")
+names2 <- c("Kim", "Yoon", "Choi")
 
-sample(names1, 4, replace = FALSE)
 ```
+
 ```{r}
 library(matchingR)
 library(dplyr)
 
-names2 <- c("Ayaba", "Victoria", "Anna", "Sihan", "Eli")
-names3 <- c("Xixuan",  "Linnan", "Yanyi", "Juye", "Jiani")
+matrix1 <- matrix(c(1,3,2,
+                  2,1,3,
+                  3,1,2),  nrow = 3, ncol = 3, byrow = TRUE)
 
-matrix1 <- matrix(c(1,2,3,4,5,#names2
-                  1,4,5,2,3,
-                  1,2,4,3,5,
-                  1,5,3,4,2,
-                  1,4,5,3,2),  nrow = 5, ncol = 5, byrow = TRUE)
+rownames(matrix1) <- names2
+colnames(matrix1) <- names1
 
-rownames(matrix1) <- names3
-colnames(matrix1) <- names2
+matrix2 <- matrix(c(1,2,3,#names3
+                  1,2,3,
+                  2,1,3),  nrow = 3, ncol = 3, byrow = TRUE)
+
+rownames(matrix2) <- names1
+colnames(matrix2) <- names2
 
 matrix1 <- t(matrix1)
-
-matrix2 <- matrix(c(4,2,5,3,1,#names3
-                  1,2,4,5,3,
-                  3,2,4,5,1,
-                  4,5,2,3,1,
-                  4,3,2,1,5),  nrow = 5, ncol = 5, byrow = TRUE)
-
-rownames(matrix2) <- names2
-colnames(matrix2) <- names3
-
 matrix2 <- t(matrix2)
 
 matching <- galeShapley.marriageMarket(proposerPref = matrix1, reviewerPref = matrix2)
 
-matching$proposals
-matching$engagements
-
-engagements <- matching$engagements
-rownames(engagements) <- names3
-engagements
-
-names4 <- data.frame(names2, seq(1:5))
-names(names4) <- c("name1", "engagements")
-names5 <- data.frame(engagements)
-names5$name2 <- row.names(names5)
-
-pairs <- full_join(names4, names5)
-pairs <- select(pairs, name1, name2)
-
-galeShapley.checkStability(matrix1, matrix2, matching$proposals, matching$engagements)
+matching
 ```
 
